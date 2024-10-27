@@ -20,13 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NextAuthProvider>
           <StoreProvider>
             <SheetProvider />
             <Toaster />
             {children}
           </StoreProvider>
-        </NextAuthProvider>
       </body>
     </html>
   );

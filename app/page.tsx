@@ -3,9 +3,8 @@ import Image from "next/image";
 
 
 export default async function Home() {
-  
+
   const session = await auth()
-  console.log(session)
 
   if (!session?.user) return null
 

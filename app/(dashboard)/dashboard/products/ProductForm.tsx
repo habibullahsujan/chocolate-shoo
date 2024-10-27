@@ -98,7 +98,6 @@ const ProductForm = ({id, defaultValues, onSubmit, categoryOptions, statusOption
                     label="Category"
                     placeholder="Select product category"
                     options={categoryOptions}
-                    disabled={!!defaultValues?.category}
                 />
 
                 <CustomSelect
@@ -107,7 +106,6 @@ const ProductForm = ({id, defaultValues, onSubmit, categoryOptions, statusOption
                     label="Status"
                     placeholder="Select product status"
                     options={statusOptions}
-                    disabled={!!defaultValues?.status}
                 />
 
                 <CustomInput type="number" name="price" label="Price" control={form.control} placeholder="Product price" />

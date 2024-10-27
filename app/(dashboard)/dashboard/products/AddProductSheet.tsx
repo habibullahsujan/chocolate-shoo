@@ -1,16 +1,16 @@
 import React from 'react'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { useOpen } from '@/hooks/use-open'
 import ProductForm from './ProductForm'
 import { useConfirm } from '@/hooks/use-confirm'
-import { categoriesOptions, statusOptions } from '@/const/const'
+import { categoriesOptions, productStatusOptions } from '@/const/const'
 import { FieldValues } from 'react-hook-form'
 import { useCreateProductMutation } from '@/redux/services/productApi'
 import { toast } from 'sonner'
+import { useOpenProduct } from '@/hooks/use-open-product'
 
 
 const AddProductSheet = () => {
-    const { isOpen, onClose } = useOpen()
+    const { isOpen, onClose } = useOpenProduct()
     const [ConfirmDialog] = useConfirm('Are you sure?', 'Are you sure you want to delete this product?')
     const [createProduct] = useCreateProductMutation()
 
@@ -39,11 +39,6 @@ const AddProductSheet = () => {
     }
 
 
-    // const onDelete = async () => {
-    //     const ok = await confirm();
-    // }
-
-
     return (
         <>
             <ConfirmDialog />
@@ -57,14 +52,14 @@ const AddProductSheet = () => {
                             Add new product to show in product table.
                         </SheetDescription>
                     </SheetHeader>
-
                     <ProductForm
                         key={1}
                         categoryOptions={categoriesOptions}
                         onSubmit={onSubmit}
-                        statusOptions={statusOptions}
+                        statusOptions={productStatusOptions}
                         defaultValues={defaultValues}
                         disabled={false}
+
                     />
 
                 </SheetContent>

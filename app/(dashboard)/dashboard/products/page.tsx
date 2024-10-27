@@ -6,9 +6,9 @@ import { CiExport } from 'react-icons/ci'
 import { IoIosAdd } from "react-icons/io";
 import { DataTable } from '../(components)/DataTable';
 import { orderColumns } from './productsColumn';
-import { useOpen } from '@/hooks/use-open';
 import { useBulkDeleteProductsMutation, useGetAllProductsQuery } from '@/redux/services/productApi';
 import { Loader2 } from 'lucide-react';
+import { useOpenProduct } from '@/hooks/use-open-product';
 
 
 
@@ -16,7 +16,7 @@ const Products = () => {
     const { data, isLoading } = useGetAllProductsQuery({});
 
     const [bulkDelete] = useBulkDeleteProductsMutation()
-    const { onOpen } = useOpen()
+    const { onOpen } = useOpenProduct()
 
     return (
         <div className='mt-4 w-full p-2 flex flex-col gap-y-2 ml-8 lg:ml-48'>
@@ -30,9 +30,10 @@ const Products = () => {
             <div className='container mx-auto bg-white rounded-md shadow-md p-4'>
                 {
                     isLoading ?
-                        <div className='h-full w-full flex items-center justify-center'>
+                        <div className='h-screen w-full flex items-center justify-center'>
                             <Loader2 className='animate-spin size-6' />
-                        </div> : <DataTable columns={orderColumns} data={data?.data || []} filterKey='nameEn' onDelete={(row) => {
+                        </div> :
+                         <DataTable columns={orderColumns} data={data?.data || []} filterKey='nameEn' onDelete={(row) => {
                             const ids = row.map((r) => r.original.id)
                             bulkDelete(ids)
                         }} disabled={isLoading} />

@@ -1,7 +1,9 @@
+
+'use client'
 import React from 'react'
 import { FaMoneyBill, FaStore } from 'react-icons/fa';
 import { FcStatistics } from 'react-icons/fc';
-import { MdDashboard, MdLogout } from "react-icons/md";
+import { MdDashboard } from "react-icons/md";
 import { AiOutlineTransaction } from "react-icons/ai";
 import { CiSettings, CiShoppingCart } from "react-icons/ci";
 import { FaShoppingBag } from "react-icons/fa";
@@ -12,8 +14,7 @@ import Image from 'next/image';
 import logo from '@/assets/logo.svg'
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { signOut } from 'next-auth/react';
-import { Button } from '@/components/ui/button';
+import LogoutButton from './LogoutButton';
 
 
 const dashboardItem = [
@@ -89,8 +90,7 @@ const Sidebar = () => {
       </div>
       <div>
         <Link href={'/dashboard/settings'} className='flex items-center gap-2'><CiSettings className='size-4' /> <span className='hidden lg:block'>Settings</span></Link>
-        <Button onClick={() => signOut({ callbackUrl: '/sign-in' })} className='flex items-center gap-2'> <MdLogout className='size-4' /><span className='hidden lg:block'>Logout</span>
-        </Button>
+        <LogoutButton />
       </div>
     </div>
   )

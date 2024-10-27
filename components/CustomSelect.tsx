@@ -1,7 +1,7 @@
 import React from 'react';
 import { Controller, Control } from 'react-hook-form';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { FormControl, FormItem, FormLabel } from './ui/form';
+import Select from 'react-select';
 
 type Option = {
     label: string;
@@ -15,10 +15,9 @@ type CustomSelectProps = {
     control: Control<any>;
     options: Option[];
     placeholder?: string;
-    disabled?: boolean;
 };
 
-const CustomSelect: React.FC<CustomSelectProps> = ({ name, label, control, options, placeholder, disabled }) => {
+const CustomSelect: React.FC<CustomSelectProps> = ({ name, label, control, options, placeholder }) => {
     return (
         <FormItem>
             {label && <FormLabel>{label}</FormLabel>}
@@ -26,23 +25,16 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ name, label, control, optio
                 <Controller
                     name={name}
                     control={control}
+                    defaultValue={null} // Set default value to null if no selection is desired initially
                     render={({ field }) => (
                         <Select
-                            onValueChange={(value) => field.onChange(value)}
-                            value={field.value || ''}
-                            disabled={disabled}
-                        >
-                            <SelectTrigger className='w-full'>
-                                <SelectValue placeholder={placeholder || 'Select an option'} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {options.map((option) => (
-                                    <SelectItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                            {...field}
+                            options={options}           // Pass options array
+                            placeholder={placeholder}
+                            isClearable
+                            onChange={(selectedOption) => field.onChange(selectedOption?.value)} // Set entire option
+                            value={options?.find(option => option?.value === field?.value)}   // Show selected option
+                        />
                     )}
                 />
             </FormControl>

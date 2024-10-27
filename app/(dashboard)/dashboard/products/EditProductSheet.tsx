@@ -15,9 +15,8 @@ const EditProductSheet = () => {
     const { data: productData } = useGetAProductQuery(id)
 
     const onSubmit = (values: FieldValues) => {
-        console.log(values)
     }
-    
+
     const defaultValues = productData?.data ? {
         code: productData?.data?.code,
         nameEn: productData?.data?.nameEn,

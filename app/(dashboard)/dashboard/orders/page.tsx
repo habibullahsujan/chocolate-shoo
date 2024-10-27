@@ -6,9 +6,19 @@ import { IoIosAdd } from "react-icons/io";
 import { DataTable } from '../(components)/DataTable';
 import { orderColumns } from './orderColumns';
 import { useOpen } from '@/hooks/use-open';
+import { useBulkDeleteOrdersMutation, useGetAllOrdersQuery } from '@/redux/services/ordersApi';
+import { Loader2 } from 'lucide-react';
 
 const Orders = () => {
-    const {isOpen, onOpen} =useOpen()
+    const { onOpen } = useOpen()
+
+    const { data: ordersData, isLoading } = useGetAllOrdersQuery({});
+
+
+    const [bulkDeleteOrders, { isLoading: bulkDeleteLoading }] = useBulkDeleteOrdersMutation()
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     return (
         <div className='mt-4 w-full p-2 flex flex-col gap-y-2 ml-8 lg:ml-48'>
             <div className="flex items-center justify-between flex-col lg:flex-row">
@@ -19,7 +29,17 @@ const Orders = () => {
                 </div>
             </div>
             <div className='container mx-auto bg-white rounded-md shadow-md p-4'>
-                <DataTable filterKey='name-en'  columns={orderColumns} data={[]}/>
+                {
+                    isLoading || bulkDeleteLoading ?
+                        <div className='h-screen w-full flex items-center justify-center'>
+                            <Loader2 className='animate-spin size-6' />
+                        </div>
+                        :
+                        <DataTable columns={orderColumns} data={ordersData?.data || []} filterKey='nameEn' onDelete={(row) => {
+                            const ids = row.map((r) => r.original.id)
+                            bulkDeleteOrders(ids)
+                        }} disabled={isLoading} />
+                }
             </div>
         </div>
     )

@@ -32,6 +32,12 @@ export const productTypeOptions = [
   },
 ];
 
+export const productStatusOptions = [
+  {value:"approved",label:"Approved"},
+  {value:"pending",label:"Pending"},
+  {value:"running",label:"Running"},
+]
+
 export const statusOptions=[
 
   {

@@ -1,21 +1,18 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+
+
 import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown } from "lucide-react"
-import Actions from "../(components)/Actions"
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
+import OrderActions from "../(components)/OrderActions"
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
 
-export const orderColumns: ColumnDef<Payment>[] = [
+
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const orderColumns: ColumnDef<any>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -41,43 +38,75 @@ export const orderColumns: ColumnDef<Payment>[] = [
   {
     accessorKey: 'orderId',
     header: 'Order ID',
+    cell: ({ cell }) => (
+      <div>
+        <span>{(cell.getValue() as string).split('-')[0]}</span>
+      </div>
+    )
   },
   {
-    accessorKey: "name-en",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Product
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    id: "nameEn",
+    accessorKey: "product.nameEn",
+    header: "Product",
+    cell: ({ cell }) => (
+      <div>
+        <span>{cell.getValue() as string}</span>
+      </div>
+    )
 
   },
 
   {
     accessorKey: 'date',
     header: 'Date',
+    cell: ({ cell }) => (
+
+      <div>
+        <span>{format(cell.getValue() as string, 'yyyy-MM-dd')}</span>
+
+      </div>
+    )
+
   },
   {
-    accessorKey: 'customer',
+    accessorKey: 'user.name',
     header: 'Customer',
+  },
+  {
+    accessorKey: 'quantity',
+    header: 'Quantity',
   },
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ cell }) => (
+      <div>
+        <span className={cn('capitalize text-white p-2 rounded-md', cell.getValue() === 'running' && 'bg-orange-500/70',cell.getValue() ==='stopped'&& 'bg-rose-500')}>{cell.getValue() as string}</span>
+      </div>
+    )
   },
 
   {
-    accessorKey: "amount",
-    header: "Amount",
+    accessorKey: "unitPrice",
+    header: "Unit Price",
+    cell: ({ cell }) => (
+      <div>
+        <span>${cell.getValue() as string}</span>
+      </div>
+    )
+  },
+  {
+    accessorKey: "totalPrice",
+    header: "Total Price",
+    cell: ({ cell }) => (
+      <div>
+        <span>${cell.getValue() as string}</span>
+      </div>
+    )
   },
   {
     id: 'actions',
     header: 'Actions',
-    cell: ({ row }) => <Actions />
+    cell: ({ row }) => <OrderActions id={row.original.id} />
   }
 ]

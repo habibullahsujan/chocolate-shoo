@@ -80,7 +80,7 @@ export const orderColumns: ColumnDef<TProduct>[] = [
     header: "Status",
     cell: ({ cell }) => (
       <div>
-        <span className={cn('capitalize text-white p-2 rounded-md', cell.getValue() === 'running' && 'bg-orange-500',cell.getValue() ==='stopped'&& 'bg-rose-500')}>{cell.getValue() as string}</span>
+        <span className={cn('capitalize text-white p-2 rounded-md', cell.getValue() === 'approved' && 'bg-orange-500',cell.getValue() ==='pending'&& 'bg-rose-500')}>{cell.getValue() as string}</span>
       </div>
     )
   },

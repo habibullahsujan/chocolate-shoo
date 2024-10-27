@@ -1,16 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { productsApi } from "./services/productApi";
 import { ordersApi } from "./services/ordersApi";
+import { customersApi } from "./services/customerApi";
 // ...
 
 export const store = configureStore({
   reducer: {
     [productsApi.reducerPath]: productsApi.reducer,
     [ordersApi.reducerPath]: ordersApi.reducer,
+    [customersApi.reducerPath]:customersApi.reducer
   }, // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(productsApi.middleware,ordersApi.middleware),
+    getDefaultMiddleware().concat(productsApi.middleware,ordersApi.middleware,customersApi.middleware),
 
 });
 

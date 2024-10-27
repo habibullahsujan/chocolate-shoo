@@ -10,9 +10,10 @@ type TCustomInputProps = {
     placeholder: string;
     message?: string;
     className?: string;
-    type?: string
+    type?: string;
+    disabled?: boolean
 }
-const CustomInput = ({ control, name, label, placeholder, className, type='text' }:TCustomInputProps) => {
+const CustomInput = ({disabled, control, name, label, placeholder, className, type='text' }:TCustomInputProps) => {
     return (
         <FormField
             control={control}
@@ -21,7 +22,7 @@ const CustomInput = ({ control, name, label, placeholder, className, type='text'
                 <FormItem>
                     <FormLabel>{label}</FormLabel>
                     <FormControl>
-                        <Input className={className} type={type} placeholder={placeholder} {...field} />
+                        <Input disabled={disabled} className={className} type={type} placeholder={placeholder} {...field} />
                     </FormControl>
 
                 </FormItem>

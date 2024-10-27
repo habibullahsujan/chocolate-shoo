@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   try {
 
 
-    const { email, password, role } = await request.json();
+    const { email, password, role,name } = await request.json();
 
     const existUser = await prisma.user.findUnique({
       where: {
@@ -25,6 +25,8 @@ export async function POST(request: Request) {
         email,
         password: hashedPassword,
         role,
+        name
+
       },
     });
 

@@ -1,5 +1,5 @@
 import { prisma } from "@/utils/prisma";
-import { parse, subDays } from "date-fns";
+import { isValid, parse, subDays } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest) => {
@@ -23,14 +23,22 @@ export const GET = async (req: NextRequest) => {
       : defaultFrom;
     const endDate = to ? parse(to, "yyyy-MM-dd", new Date()) : defaultTo;
 
+    if (!isValid(startDate) || !isValid(endDate)) {
+      throw new Error('Invalid date format');
+    }
+
     const result = await prisma.orders.findMany({
+      include: {
+        product: true, // Include full product data
+        user: true,    // Include full user data
+      },
       where: {
         date: {
           gte: startDate,
           lte: endDate,
         },
       },
-    });
+    })
 
     return NextResponse.json(
       {
@@ -40,9 +48,9 @@ export const GET = async (req: NextRequest) => {
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
 
     if (error) {
+
       return NextResponse.json(
         { message: "Failed to fetch orders" },
         { status: 500 }
@@ -51,13 +59,39 @@ export const GET = async (req: NextRequest) => {
   }
 };
 
-
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+    const { userId, productId, status, quantity, unitPrice,totalPrice } = body;
 
+
+    if (!userId || !productId) {
+      return NextResponse.json(
+        { success: false, message: "User ID and Product ID are required." },
+        { status: 400 }
+      );
+    }
     const newOrder = await prisma.orders.create({
-      data: body,
+      data: {
+        status,
+        quantity,
+        unitPrice,
+        totalPrice,
+
+        // Connect the user using the userId
+        user: {
+          connect: {
+            id: userId, // Ensure `userId` is valid
+          },
+        },
+
+        // Connect the product using the productId
+        product: {
+          connect: {
+            id: productId, // Ensure `productId` is valid
+          },
+        },
+      },
     });
 
     return NextResponse.json(

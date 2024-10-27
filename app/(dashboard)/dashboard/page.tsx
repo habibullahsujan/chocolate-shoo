@@ -10,31 +10,13 @@ import React from "react"
 import { add, format, subDays } from "date-fns"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import qs from 'query-string'
-import { useGetAllOrdersQuery } from "@/redux/services/ordersApi"
-import { useSession } from "next-auth/react"
+import { useGetAllOrdersQuery, useGetTodaySalesQuery, useGetTotalSalesQuery, useMostSoldItemsQuery, useSalesByMonthQuery } from "@/redux/services/ordersApi"
 
 
 
-const cardInfo = [
-  { title: 'Total sales', value: '$200.0K', message: 'Total sales  1000kg' },
-  { title: 'Todays sales', value: '$20.0K', message: 'Today total sales 100kg' },
-  { title: 'Todays Order', value: '130Kg', message: 'Today total order 130kg' },
-]
-
-const productsData = [
-  { id: 1, name: 'Siwar Signature', sold: 120 },
-  { id: 2, name: 'Halqum Layer', sold: 800 },
-  { id: 3, name: 'Almond Dates', sold: 50 },
-  { id: 4, name: 'Pistahio Dates', sold: 50 },
-  { id: 5, name: 'Mili Baqlawa', sold: 50 },
-  { id: 6, name: 'Florentine Logo', sold: 50 },
-];
 const Dashboard = () => {
 
-  const { data: session } = useSession();
-  console.log(session)
-
-const pathname=usePathname()
+  const pathname = usePathname()
   const router = useRouter()
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(),
@@ -53,11 +35,21 @@ const pathname=usePathname()
     to: to ? new Date(to) : defaultTo
   }
 
-  const {data:ordersData}=useGetAllOrdersQuery({
+  const { data: ordersData, isLoading } = useGetAllOrdersQuery({
     from: format(paramState.from, 'yyyy-MM-dd'),
-    to: format(paramState.to, 'yyyy-MM-dd'),})
+    to: format(paramState.to, 'yyyy-MM-dd'),
+  })
 
-    console.log(ordersData)
+
+  const { data: totalSales, isLoading: totalSalesLoading } = useGetTotalSalesQuery({})
+  const { data: todaySales, isLoading: todaySalesLoading } = useGetTodaySalesQuery({})
+
+  const { data: mostSoldItems, isLoading: mostSoldItemsLoading } = useMostSoldItemsQuery({})
+  const {data:salesByMonth} =useSalesByMonthQuery({})
+
+
+
+
 
   const pushToUrl = (dateRange: DateRange | undefined) => {
     const query = {
@@ -79,6 +71,7 @@ const pathname=usePathname()
   }
 
 
+
   return (
     <div className="mt-4 w-full p-2 flex flex-col gap-y-2 ml-8 lg:ml-48">
       <div className="flex justify-between items-start lg:items-center gap-y-3 flex-col lg:flex-row">
@@ -86,17 +79,23 @@ const pathname=usePathname()
         <DatePickerWithRange date={date} setDate={setDate} pushToUrl={pushToUrl} onReset={onReset} />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-2">
+
         {
-          cardInfo.map((c) => (
-            <DashboardCard key={c.title} title={c.title} value={c.value} message={c.message} />
-          ))
+          !totalSalesLoading && <DashboardCard key={"TotalSales"} title={"Total Sales"} value={totalSales?.data?._sum.totalPrice} message={`Total sales ${totalSales?.data?._sum.quantity} kg`} />
+        }
+        {
+          !todaySalesLoading && <DashboardCard key={"TodaySales"} title={"Today Sales"} value={todaySales?.data?._sum.totalPrice || '000'} message={`Total sales ${todaySales?.data?._sum.quantity || '000'} kg`} />
         }
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-2">
         <TotalRevenue />
-        <MostSoldItems products={productsData} />
+        {
+          !mostSoldItemsLoading && <MostSoldItems products={mostSoldItems?.data?.mostSoldItemsWithProduct} />
+        }
       </div>
-      <LatestOrders  />
+      {
+        !isLoading && <LatestOrders ordersData={ordersData?.data} />
+      }
     </div>
   )
 }
