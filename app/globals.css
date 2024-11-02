@@ -76,3 +76,26 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+
+.swiper-button-next{
+    color: #fff !important;
+    background-color: aqua !important;
+    border-radius: 50% !important;
+    padding: 25px !important;
+}
+
+.swiper-button-next:hover{
+    background-color: rgba(228, 144, 35, 0.8) !important;
+}
+
+.swiper-button-prev{
+    color: #fff !important;
+    background-color: aqua !important;
+    border-radius: 50% !important;
+    padding: 25px !important;
+}
+.swiper-button-prev:hover{
+  background-color: rgba(228, 144, 35, 0.8) !important;
+
+}

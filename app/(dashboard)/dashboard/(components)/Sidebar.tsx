@@ -33,17 +33,9 @@ const dashboardItem = [
     icon: <FaShoppingBag className='size-4' />
   },
   {
-    label: 'Store',
-    href: '/dashboard/store',
+    label: 'Stock',
+    href: '/dashboard/stock',
     icon: <FaStore className='size-4' />
-  }, {
-    label: 'Statistics',
-    href: '/dashboard/statistics',
-    icon: <FcStatistics className='size-4' />
-  }, {
-    label: 'Payments',
-    href: '/dashboard/payments',
-    icon: <FaMoneyBill className='size-4' />
   },
   {
     label: "Transactions",

@@ -15,12 +15,13 @@ const Orders = () => {
     const { data: ordersData, isLoading } = useGetAllOrdersQuery({});
 
 
+
     const [bulkDeleteOrders, { isLoading: bulkDeleteLoading }] = useBulkDeleteOrdersMutation()
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
     return (
-        <div className='mt-4 w-full p-2 flex flex-col gap-y-2 ml-8 lg:ml-48'>
+        <div className='mt-4 p-2 flex flex-col gap-y-2 w-full'>
             <div className="flex items-center justify-between flex-col lg:flex-row">
                 <h1 className='font-bold text-xl lg:text-2xl'>Orders</h1>
                 <div className='flex gap-x-1 items-center justify-center'>
@@ -35,10 +36,15 @@ const Orders = () => {
                             <Loader2 className='animate-spin size-6' />
                         </div>
                         :
-                        <DataTable columns={orderColumns} data={ordersData?.data || []} filterKey='nameEn' onDelete={(row) => {
-                            const ids = row.map((r) => r.original.id)
-                            bulkDeleteOrders(ids)
-                        }} disabled={isLoading} />
+                        <DataTable
+                            columns={orderColumns}
+                            data={ordersData?.data || []}
+                            filterKey='nameEn'
+                            onDelete={(row) => {
+                                const ids = row.map((r) => r.original.id)
+                                bulkDeleteOrders(ids)
+                            }}
+                            disabled={isLoading} />
                 }
             </div>
         </div>

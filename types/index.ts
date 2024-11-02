@@ -10,3 +10,10 @@ export type TProduct = {
   createdAt: string; // Creation date, in ISO format
   updatedAt: string; // Update date, in ISO format
 };
+
+export type TUser={
+  email:string;
+  id:string;
+  image:string | null;
+  name:string
+}

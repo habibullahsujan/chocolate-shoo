@@ -1,10 +1,9 @@
 import Credentials from "next-auth/providers/credentials";
-import type { NextAuthConfig } from "next-auth";
 import { LoginSchema } from "./schemas";
 import bcrypt from "bcryptjs";
 import { prisma } from "./utils/prisma";
 
-export default {
+export const authConfig= {
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -33,4 +32,5 @@ export default {
       },
     }),
   ],
-} satisfies NextAuthConfig;
+
+}

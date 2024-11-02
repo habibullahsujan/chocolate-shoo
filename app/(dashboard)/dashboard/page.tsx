@@ -10,7 +10,7 @@ import React from "react"
 import { add, format, subDays } from "date-fns"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import qs from 'query-string'
-import { useGetAllOrdersQuery, useGetTodaySalesQuery, useGetTotalSalesQuery, useMostSoldItemsQuery, useSalesByMonthQuery } from "@/redux/services/ordersApi"
+import { useGetAllOrdersQuery, useGetTodaySalesQuery, useGetTotalSalesQuery, useMostSoldItemsQuery } from "@/redux/services/ordersApi"
 
 
 
@@ -41,11 +41,13 @@ const Dashboard = () => {
   })
 
 
+
   const { data: totalSales, isLoading: totalSalesLoading } = useGetTotalSalesQuery({})
   const { data: todaySales, isLoading: todaySalesLoading } = useGetTodaySalesQuery({})
 
   const { data: mostSoldItems, isLoading: mostSoldItemsLoading } = useMostSoldItemsQuery({})
-  const {data:salesByMonth} =useSalesByMonthQuery({})
+
+  // const {data:salesByMonth} =useSalesByMonthQuery({})
 
 
 
@@ -73,7 +75,7 @@ const Dashboard = () => {
 
 
   return (
-    <div className="mt-4 w-full p-2 flex flex-col gap-y-2 ml-8 lg:ml-48">
+    <div className="mt-4 w-full p-2 flex flex-col gap-y-2">
       <div className="flex justify-between items-start lg:items-center gap-y-3 flex-col lg:flex-row">
         <h1 className="text-xl lg:text-4xl font-bold">Welcome to Dashboard</h1>
         <DatePickerWithRange date={date} setDate={setDate} pushToUrl={pushToUrl} onReset={onReset} />
@@ -81,7 +83,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-2">
 
         {
-          !totalSalesLoading && <DashboardCard key={"TotalSales"} title={"Total Sales"} value={totalSales?.data?._sum.totalPrice} message={`Total sales ${totalSales?.data?._sum.quantity} kg`} />
+          !totalSalesLoading && <DashboardCard key={"TotalSales"} title={"Total Sales"} value={totalSales?.data?._sum.totalPrice || '000'} message={`Total sales ${totalSales?.data?._sum.quantity || '000'} kg`} />
         }
         {
           !todaySalesLoading && <DashboardCard key={"TodaySales"} title={"Today Sales"} value={todaySales?.data?._sum.totalPrice || '000'} message={`Total sales ${todaySales?.data?._sum.quantity || '000'} kg`} />

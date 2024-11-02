@@ -12,6 +12,7 @@ import { useGetAllCustomersQuery } from '@/redux/services/customerApi'
 const EditOrderSheet = () => {
     const { isOpen, onClose, id } = useEditOrder()
 
+
     const { data: orderData,isLoading:ordersLoading } = useGetAOrderQuery(id)
 
     const { data: products, isLoading: productsLoading } = useGetAllProductsQuery({});
@@ -31,6 +32,8 @@ const EditOrderSheet = () => {
         label: customer.name,
         value: customer.id
     }))
+
+    
 
     const onSubmit = (values: FieldValues) => {
     }

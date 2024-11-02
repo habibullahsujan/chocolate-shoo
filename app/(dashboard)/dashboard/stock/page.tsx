@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Store = () => {
+const Stock = () => {
   return (
     <div className='w-full  h-screen flex items-center justify-center'>
-
+      this is a stock page
     </div>
   )
 }
 
-export default Store
+export default Stock
